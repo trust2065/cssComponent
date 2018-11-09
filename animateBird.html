@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>redbull animation</title>
+</head>
+
+<style>
+    body {
+        height: 2000px;
+    }
+
+    .imgBlock img {
+        position: absolute;
+    }
+
+    .imgBlockIkarus img {
+        right: 200px;
+        top: 500px;
+        transition: all 3s ease 0.2s;
+    }
+
+    .imgBlockBird img {
+        left: 100px;
+        top: 500px;
+    }
+
+    .imgBlock img:not(:first-child) {
+        display: none;
+    }
+</style>
+
+<body>
+    <div class="imgBlock imgBlockIkarus">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.ikarus-1.png?v=1">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.ikarus-2.png?v=1">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.ikarus-3.png?v=1">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.ikarus-4.png?v=1">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.ikarus-5.png?v=1">
+    </div>
+
+    <div class="imgBlock imgBlockBird">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.bird-1.png">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.bird-2.png">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.bird-3.png">
+        <img src="https://flugtag.redbull.com/au/wp-content/themes/bbe-flugtag-theme-child/assets/web/img/2016/au/intro.bird-4.png">
+    </div>
+
+</body>
+<script>
+    (() => {
+        const animatePeriod = 1000;
+        const animateRefreshRate = 200;
+        let isAnimating = false;
+        let isMoving = false;
+        const imgBlockIkarus = document.getElementsByClassName("imgBlock")[0];
+        const imgBlockBird = document.getElementsByClassName("imgBlock")[1];
+
+        document.addEventListener("scroll", function () {
+            const locationY = window.pageYOffset;
+
+            // console.log(locationY);
+
+            if (locationY >= 0 && locationY <= 400) {
+
+                // console.log('locationY: ' + locationY);
+                if (locationY >= 400) {
+                    moveElement(imgBlockIkarus, 700, 1.2);
+                }
+                else if (locationY >= 300) {
+                    moveElement(imgBlockIkarus, 600, 1.1);
+                }
+                else if (locationY >= 200) {
+                    moveElement(imgBlockIkarus, 500);
+                }
+                else if (locationY >= 100) {
+                    moveElement(imgBlockIkarus, 400);
+                }
+                else if (locationY >= 0) {
+                    moveElement(imgBlockIkarus);
+                }
+
+                if (!isAnimating) {
+                    animateElement(imgBlockBird);
+                    animateElement(imgBlockIkarus);
+                }
+            }
+        })
+        function moveElement(target, moveDistance = 0, scale = 1) {
+            var frames = target.children;
+            // console.log(`moveElement, distance: ${moveDistance}`);
+
+            for (let i = 0; i < frames.length; i++) {
+                const frame = frames[i];
+                frame.style.transform = `scale(${scale}) translateX(-${moveDistance}px)`;
+            }
+        }
+
+        function animateElement(target) {
+            isAnimating = true;
+
+            var frames = target.children;
+
+            var frameCount = frames.length;
+            var i = 0;
+            var refreshIntervalId = setInterval(function () {
+                frames[i % frameCount].style.display = "none";
+                frames[++i % frameCount].style.display = "block";
+            }, animateRefreshRate);
+
+            setTimeout(() => {
+                clearInterval(refreshIntervalId);
+                isAnimating = false;
+            }, animatePeriod);
+        }
+    })();
+
+</script>
+
+</html>
